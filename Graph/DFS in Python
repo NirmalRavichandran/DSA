@@ -1,0 +1,22 @@
+def dfs(adj,start):
+    vis = set()
+    res = []
+    def dfs_helper(v):
+        vis.add(v)
+        res.append(v)
+        for nbr in adj[v]:
+            if nbr not in vis:
+                dfs_helper(nbr)
+    dfs_helper(start)
+    return res
+
+
+
+if __name__ == "__main__":
+
+    # create the adjacency list
+    # [ [2, 3, 1], [0], [0, 4], [0], [2] ]
+    adj = [[1, 2], [0, 2, 3], [0, 4], [1, 4], [2, 3]]
+    ans = dfs(adj,0)
+    for i in ans:
+        print(i, end=" ")
