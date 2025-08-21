@@ -1,0 +1,40 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = self.right = None
+
+def printInorder(root):
+    if root is None:
+        return
+    printInorder(root.left)
+    print(root.data,end=" ")
+    printInorder(root.right)
+
+def printPostorder(root):
+    if root is None:
+        return
+    printPostorder(root.left)
+    printPostorder(root.right)
+    print(root.data,end=" ")
+
+def printPreorder(root):
+    if root is None:
+        return
+    print(root.data,end=" ")
+    printPreorder(root.left)
+    printPreorder(root.right)
+
+if __name__ == '__main__':
+    root = Node(1)
+    root.left = Node(2)
+    root.right = Node(3)
+    root.left.left = Node(4)
+    root.left.right = Node(5)
+    print("Postorder traversal of binary tree is")
+    printPostorder(root)
+    print()
+    print("Preorder traversal of binary tree is")
+    printPreorder(root)
+    print()
+    print("Inorder traversal of binary tree is")
+    printInorder(root)
