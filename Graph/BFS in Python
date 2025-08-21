@@ -1,0 +1,24 @@
+from collections import deque
+def bfs(adj):
+    vis = [False]*len(adj)
+    vis[0] = True
+    q = deque([0])
+    res= []
+    while q:
+        node = q.popleft()
+        res.append(node)
+        for nbr in adj[node]:
+            if not vis[nbr]:
+                vis[nbr] = True
+                q.append(nbr)
+    return res
+
+
+if __name__ == "__main__":
+
+    # create the adjacency list
+    # [ [2, 3, 1], [0], [0, 4], [0], [2] ]
+    adj = [[1, 2], [0, 2, 3], [0, 4], [1, 4], [2, 3]]
+    ans = bfs(adj)
+    for i in ans:
+        print(i, end=" ")
