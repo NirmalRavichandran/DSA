@@ -1,0 +1,35 @@
+Create n empty buckets (Or lists) and do the following for every array element arr[i].
+Insert arr[i] into bucket[n*array[i]]
+Sort individual buckets using any sorting.
+Concatenate all sorted buckets.
+
+class Solution:
+    def bucketSort(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return []
+        
+        # Find min and max to handle negative numbers and determine range
+        min_val, max_val = min(nums), max(nums)
+        range_val = max_val - min_val + 1
+        
+        # Choose number of buckets (sqrt of array length is a common choice)
+        n = len(nums)
+        bucket_count = int(n ** 0.5) or 1
+        buckets = [[] for _ in range(bucket_count)]
+        
+        # Distribute elements into buckets
+        for num in nums:
+            # Normalize the value to map to bucket index
+            index = int((num - min_val) * bucket_count / range_val)
+            # Handle edge case where num == max_val
+            if index == bucket_count:
+                index -= 1
+            buckets[index].append(num)
+        
+        # Sort each bucket and concatenate results
+        result = []
+        for bucket in buckets:
+            bucket.sort()  
+            result.extend(bucket)
+        
+        return result
