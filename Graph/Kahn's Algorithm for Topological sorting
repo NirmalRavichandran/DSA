@@ -1,0 +1,32 @@
+from collections import deque
+
+
+def kahns(adj):
+    indegree = [0]*len(adj)
+    for v in range(len(adj)):
+        for u in adj[v]:
+            indegree[u]+=1
+    print(indegree)
+    q = deque([i for i in range(len(adj)) if indegree[i]==0])
+    res = []
+    while q:
+        node = q.popleft()
+        res.append(node)
+        for nbr in adj[node]:
+            indegree[nbr]-=1
+            if indegree[nbr]==0:
+                q.append(nbr)
+    if len(res)!=len(adj):
+        print("Graph has cycle")
+        return []
+    return res
+
+
+if __name__ == "__main__":
+
+    # create the adjacency list
+    # [ [2, 3, 1], [0], [0, 4], [0], [2] ]
+    adj = [[1], [2], [3], [], [5], [1, 2]]
+    ans = kahns(adj)
+    for i in ans:
+        print(i, end=" ")
