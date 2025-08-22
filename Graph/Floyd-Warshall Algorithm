@@ -1,0 +1,28 @@
+# k is an intermediary node between i and j
+# If the shortest path from i to j passes through some vertex k, 
+# then the path from i to k and the path from k to j must also be shortest paths.
+# Not suitable for sparse graph as it will always run O(V^3) times.
+def floydWarshall(dist):
+    V = len(dist)
+    for k in range(V):
+        for i in range(V):
+            for j in range(V):
+                if dist[i][j] > dist[i][k] + dist[k][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+
+if __name__ == "__main__":
+
+    INF = 100000000;
+    dist = [
+        [0, 4, INF, 5, INF],
+        [INF, 0, 1, INF, 6],
+        [2, INF, 0, 3, INF],
+        [INF, INF, 1, 0, 2],
+        [1, INF, INF, 4, 0]
+    ]
+
+    floydWarshall(dist)
+    for i in range(len(dist)):
+        for j in range(len(dist)):
+            print(dist[i][j], end=" ")
+        print()
