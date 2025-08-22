@@ -1,0 +1,35 @@
+import heapq
+import sys
+
+def constructAdj(edges,V):
+    adj = [[] for i in range(V)]
+    for edge in edges:
+        u,v,w = edge
+        adj[u].append([v,w])
+        adj[v].append([u,w])
+    return adj
+
+def dijkstra(V,edges,src):
+    adj = constructAdj(edges,V)
+    min_heap = []
+    dist = [sys.maxsize] * V
+    heapq.heappush(min_heap,(0,src))
+    dist[src] = 0
+    while min_heap:
+        u = heapq.heappop(min_heap)[1]
+        for v,w in adj[u]:
+            if dist[v] > dist[u]+w:
+                dist[v] = dist[u]+w
+                heapq.heappush(min_heap,(dist[v],v))
+    return dist
+if __name__ == "__main__":
+    V = 5
+    src = 0
+
+    # edge list format: {u, v, weight}
+    edges =[[0, 1, 4], [0, 2, 8], [1, 4, 6], [2, 3, 2], [3, 4, 10]];
+
+    result = dijkstra(V, edges, src)
+
+    # Print shortest distances in one line
+    print(' '.join(map(str, result)))
