@@ -1,0 +1,28 @@
+import heapq
+def tree(V,E,edges):
+    adj = [[] for _ in range(V)]
+    for i in range(E):
+        u,v,w = edges[i]
+        adj[u].append((v,w))
+        adj[v].append((u,w))
+    min_heap = []
+    res = 0
+    visited = [False] * V
+    heapq.heappush(min_heap,(0,0))
+    while min_heap:
+        wt,node = heapq.heappop(min_heap)
+        if visited[node]:
+            continue
+        res+=wt
+        visited[node] = True
+        for v,w in adj[node]:
+            if not visited[v]:
+                heapq.heappush(min_heap,(w,v))
+    return res
+
+if __name__ == "__main__":
+    graph = [[0, 1, 5],
+             [1, 2, 3],
+             [0, 2, 1]]
+
+    print(tree(3, 3, graph))
