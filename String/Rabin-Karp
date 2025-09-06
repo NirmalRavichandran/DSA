@@ -1,0 +1,63 @@
+"""
+Text = "ABCCDDEAFG" and Pattern = "CDD"
+Let us assign a numerical value from 1-26 for the characters.
+
+hash(s) =  (s[0] * p(n-1) + s[1] * p(n-2) + ... + s[n-1] * p0 ) %mod
+
+Where:
+
+s[i] is the numeric value of the i-th character ('a' = 1, 'b' = 2, ..., 'z' = 26)
+p is a small prime number (commonly 31 or 37)
+mod is a large prime number (like 1e9 + 7) to avoid overflow and reduce hash collisions
+
+Hash Recurrence Relation
+Let preHash[i] represent the hash of the prefix substring s[0...i].
+
+Then the recurrence is: preHash[i] = preHash[i - 1] * base + s[i]
+
+Where:
+
+p[0] = s[0]
+s[i] is the numeric value of the i-th character ('a' = 1, 'b' = 2, ..., 'z' = 26)
+base is a chosen prime number (commonly 31 or 37)
+All operations are done under modulo mod to avoid overflow
+
+How to Calculate Hash from L to R ?
+hash(L, R) = (prefix[R] - prefix[L-1] * power(R - L + 1) + mod) % mod
+Compare the hash value of the pattern with the hash value of the text. If they match then, character-matching is performed.
+If the characters do not match move the window by subtracting the first term and adding the next term.
+Repeat the Process
+"""
+class RabinKarp:
+    PRIME = 101
+
+    def claculateHash(self,s):
+        hash_val = 0
+        for i,ch in enumerate(s):
+            hash_val += ord(ch) * (self.PRIME**i)
+        return hash_val
+
+    def updateHash(self,prevhash,oldChar,newChar,patternLength):
+        newHash = (prevhash - ord(oldChar)) / self.PRIME
+        newHash += ord(newChar) * (self.PRIME**(patternLength-1))
+        return newHash
+
+    def search(self,text,pattern):
+        patternLength = len(pattern)
+        patternHash = self.claculateHash(pattern)
+        textHash = self.claculateHash(text[:patternLength])
+
+        for i in range(len(text)-patternLength+1):
+            if textHash == patternHash:
+                if text[i:i+patternLength] == pattern:
+                    print(f"Pattern found at position {i}")
+
+            if i<len(text)-patternLength:
+                textHash = self.updateHash(
+                    textHash,
+                    text[i],
+                    text[i+patternLength],
+                    patternLength
+                )
+rk = RabinKarp()
+rk.search("abedabcabc","abc")
