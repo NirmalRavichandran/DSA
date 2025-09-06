@@ -1,0 +1,39 @@
+class RabinKarp:
+    def __init__(self, base=256, prime=101):
+        self.base = base      # base (usually alphabet size, ASCII = 256)
+        self.prime = prime    # large prime modulus
+
+    def calculate_hash(self, s: str, length: int) -> int:
+        """Compute hash for a string of given length"""
+        h = 0
+        for i in range(length):
+            h = (h * self.base + ord(s[i])) % self.prime
+        return h
+
+    def search(self, text: str, pattern: str):
+        n, m = len(text), len(pattern)
+        if m > n:
+            return
+
+        pattern_hash = self.calculate_hash(pattern, m)
+        text_hash = self.calculate_hash(text, m)
+
+        # Precompute (base^(m-1)) % prime (used to remove leading char)
+        h = pow(self.base, m - 1, self.prime)
+
+        for i in range(n - m + 1):
+            # Check hash first, then verify actual substring
+            if pattern_hash == text_hash:
+                if text[i:i+m] == pattern:
+                    print(f"Pattern found at index {i}")
+
+            # Roll the hash forward (remove left char, add new char)
+            if i < n - m:
+                text_hash = (
+                    (text_hash - ord(text[i]) * h) * self.base + ord(text[i + m])
+                ) % self.prime
+
+
+# Example usage
+rk = RabinKarp()
+rk.search("abedabcabc", "abc")
